@@ -53,7 +53,7 @@ $ mysql> source dump.sql;
 6. Execute an example in the command line:
 
 ```bash
-php example-1.php
+$ php example-1.php
 ```
 
 ![MySQL](./assets/mysql.png)
