@@ -61,17 +61,11 @@ class Validator {
   }
   
   private function checkRequiredRuleIsValid($field) {
-    $isValid = true;
-    
-    if (!array_key_exists($field, $this->data)) {
+    if ($this->checkIsOptionalField($field)) {
       return false;
     }
     
-    if (is_null($this->data[$field])) {
-      return false;
-    }
-    
-    return $isValid;
+    return true;
   }
   
   private function checkIntegerRuleIsValid($field) {
@@ -96,7 +90,7 @@ class Validator {
   }
   
   private function checkIsOptionalField($field) {
-    return !array_key_exists($field, $this->data);
+    return !array_key_exists($field, $this->data) or is_null($this->data[$field]);
   }
 }
 
@@ -126,6 +120,6 @@ $validator = new Validator($data, $rules, $messages);
 
 $validator->run();
 
-$validator->isSuccessful();
+echo $validator->isSuccessful() ? 'It is successful' . PHP_EOL : 'It is not successful' . PHP_EOL;
 
 echo json_encode($validator->failingRules());
