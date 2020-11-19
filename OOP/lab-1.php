@@ -38,19 +38,25 @@ class Validator {
     if ($rule === 'required') {
       $isValid = $this->checkRequiredRuleIsValid($field);
       
-      $this->addToErrorBag($field, $rule, $isValid);
+      if (!$isValid) {
+        $this->addToErrorBag($field, $rule);
+      }
     }
     
     if ($rule === 'email') {
       $isValid = $this->checkEmailRuleIsValid($field);
       
-      $this->addToErrorBag($field, $rule, $isValid);
+      if (!$isValid) {
+        $this->addToErrorBag($field, $rule);
+      }
     }
     
     if ($rule === 'integer') {
       $isValid = $this->checkIntegerRuleIsValid($field);
       
-      $this->addToErrorBag($field, $rule, $isValid);
+      if (!$isValid) {
+        $this->addToErrorBag($field, $rule);
+      }
     }
   }
   
@@ -69,22 +75,28 @@ class Validator {
   }
   
   private function checkIntegerRuleIsValid($field) {
-    $value = $this->data[$field] ?? null;
+    if ($this->checkIsOptionalField($field)) {
+      return true;
+    }
     
-    return is_int($value);
+    return is_int($this->data[$field]);
   }
   
   private function checkEmailRuleIsValid($field) {
-    $value = $this->data[$field] ?? null;
+    if ($this->checkIsOptionalField($field)) {
+      return true;
+    }
     
-    return filter_var($value, FILTER_VALIDATE_EMAIL);
+    return filter_var($this->data[$field], FILTER_VALIDATE_EMAIL);
   }
   
-  private function addToErrorBag($field, $rule, $isValid) {
-    if (!$isValid) {
-      $this->errorBag[$field] = array_key_exists($field, $this->errorBag)
-        ? array_merge($this->errorBag[$field], [$this->messages[$field][$rule]]) : [$this->messages[$field][$rule]];
-    }
+  private function addToErrorBag($field, $rule) {
+    $this->errorBag[$field] = array_key_exists($field, $this->errorBag)
+      ? array_merge($this->errorBag[$field], [$this->messages[$field][$rule]]) : [$this->messages[$field][$rule]];
+  }
+  
+  private function checkIsOptionalField($field) {
+    return !array_key_exists($field, $this->data);
   }
 }
 
