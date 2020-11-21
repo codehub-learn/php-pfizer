@@ -2,7 +2,7 @@
 
 class Str {
   public static function getCharsCount($str) {
-    return count_chars($str);
+    return strlen($str);
   }
   
   public static function splitOnBlanks($str) {

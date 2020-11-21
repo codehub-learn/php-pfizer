@@ -8,7 +8,7 @@ if (isset($_GET['weight']) and isset($_GET['height'])) {
   $height = $_GET['height'];
   
   // ΒΜΙ = W / H^2
-  $bmi = $height === 0 ? 0 : $weight / pow($height, 2);
+  $bmi = $height == 0 ? 0 : $weight / pow($height, 2);
 }
 ?>
 
